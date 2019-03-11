@@ -67,76 +67,82 @@ public class NewPath {
 			public void handle(MouseEvent event) {
 				// TODO Auto-generated method stub
 				
-				double sX = moveTo.getX();
-				double sY = moveTo.getY();
-				double eX = quadCurveTo.getX();
-				double eY = quadCurveTo.getY();
+				NewPath.this.drag(event.getSceneX(), event.getSceneY());
 				
-				double midX = (eX+sX)/2;
-				double midY = (eY+sY)/2;
-				
-				double mouseX = event.getSceneX();
-				double mouseY = event.getSceneY();
-				
-				
-				// 这 算的 也太 麻烦了 吧
-				length = 2*Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))*
-						((eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseX-midX)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))
-						- (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseY-midY)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY)));
-				
-				double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
-				double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
-				
-				quadCurveTo.setControlX(x);
-				quadCurveTo.setControlY(y);
-				
-				
-				path.getElements().remove(lineTo5);
-				path.getElements().remove(lineTo4);
-				path.getElements().remove(lineTo3);
-				path.getElements().remove(lineTo2);
-				path.getElements().remove(quadCurveTo);
-				path.getElements().remove(moveTo);
-				
-				path.getElements().add(moveTo);
-				path.getElements().add(quadCurveTo);
-				
-//				double ax = moveTo.getX();
-//				double ay = moveTo.getY();
-				double bx = quadCurveTo.getX();
-				double by = quadCurveTo.getY();
-				
-//				double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
-//				double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
-				double bxx = -(double)28.28*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
-				double byy = -(double)28.28*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
-
-				lineTo2.setX(bxx);
-				lineTo2.setY(byy);
-				path.getElements().add(lineTo2);
-				
-				
-				double bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-				double byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-				
-				lineTo3.setX(bxx + bxxx);
-				lineTo3.setY(byy + byyy);
-				path.getElements().add(lineTo3);
-				
-
-				lineTo4.setX(bxx);
-				lineTo4.setY(byy);
-				path.getElements().add(lineTo4);
-
-				
-				bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-				byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-
-				lineTo5.setX(bxx + bxxx);
-				lineTo5.setY(byy + byyy);
-				path.getElements().add(lineTo5);
-				
-				System.out.println(x + "   " + y);
+//				double sX = moveTo.getX();
+//				double sY = moveTo.getY();
+//				double eX = quadCurveTo.getX();
+//				double eY = quadCurveTo.getY();
+//				
+//				double midX = (eX+sX)/2;
+//				double midY = (eY+sY)/2;
+//				
+//				double mouseX = event.getSceneX();
+//				double mouseY = event.getSceneY();
+//				
+//				
+//				// 这 算的 也太 麻烦了 吧  计算的是 鼠标距离 线 高度的 2 倍
+//				length = 2*Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))*
+//						((eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseX-midX)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))
+//						- (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseY-midY)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY)));
+//				
+//				double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
+//				double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
+//				
+//				//设置 控制点
+//				quadCurveTo.setControlX(x);
+//				quadCurveTo.setControlY(y);
+//				
+//				// 中间字母的 移动
+//				test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
+//				
+//				
+//				path.getElements().remove(lineTo5);
+//				path.getElements().remove(lineTo4);
+//				path.getElements().remove(lineTo3);
+//				path.getElements().remove(lineTo2);
+//				path.getElements().remove(quadCurveTo);
+//				path.getElements().remove(moveTo);
+//				
+//				path.getElements().add(moveTo);
+//				path.getElements().add(quadCurveTo);
+//				
+////				double ax = moveTo.getX();
+////				double ay = moveTo.getY();
+//				double bx = quadCurveTo.getX();
+//				double by = quadCurveTo.getY();
+//				
+////				double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
+////				double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
+//				double bxx = -(double)28.28*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
+//				double byy = -(double)28.28*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
+//
+//				lineTo2.setX(bxx);
+//				lineTo2.setY(byy);
+//				path.getElements().add(lineTo2);
+//				
+//				
+//				double bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//				double byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//				
+//				lineTo3.setX(bxx + bxxx);
+//				lineTo3.setY(byy + byyy);
+//				path.getElements().add(lineTo3);
+//				
+//
+//				lineTo4.setX(bxx);
+//				lineTo4.setY(byy);
+//				path.getElements().add(lineTo4);
+//
+//				
+//				bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//				byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//
+//				lineTo5.setX(bxx + bxxx);
+//				lineTo5.setY(byy + byyy);
+//				path.getElements().add(lineTo5);
+//				
+//				System.out.println(x + "   " + y);
 				
 				//  判断在 直线的  哪一侧
 //				System.out.println((ey-sy)*(event.getX()-OldX) + (sx-ex)*(event.getY()-OldY) + (ex*sy-sx*ey));
@@ -149,8 +155,86 @@ public class NewPath {
 		
 	}
 
+	/*
+	 * 两个端点坐标不变   曲线的弧度变化
+	 */
+	public void drag(double mouseX, double mouseY) {
+		double sX = moveTo.getX();
+		double sY = moveTo.getY();
+		double eX = quadCurveTo.getX();
+		double eY = quadCurveTo.getY();
+		
+		double midX = (eX+sX)/2;
+		double midY = (eY+sY)/2;
+		
+		
+		// 这 算的 也太 麻烦了 吧  计算的是 鼠标距离 线 高度的 2 倍
+		length = 2*Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))*
+				((eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseX-midX)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))
+				- (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseY-midY)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY)));
+		
+		double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
+		double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
+		
+		//设置 控制点
+		quadCurveTo.setControlX(x);
+		quadCurveTo.setControlY(y);
+		
+		// 中间字母的 移动
+		test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
+		
+		
+		path.getElements().remove(lineTo5);
+		path.getElements().remove(lineTo4);
+		path.getElements().remove(lineTo3);
+		path.getElements().remove(lineTo2);
+		path.getElements().remove(quadCurveTo);
+		path.getElements().remove(moveTo);
+		
+		path.getElements().add(moveTo);
+		path.getElements().add(quadCurveTo);
+		
+//		double ax = moveTo.getX();
+//		double ay = moveTo.getY();
+		double bx = quadCurveTo.getX();
+		double by = quadCurveTo.getY();
+		
+//		double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
+//		double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
+		double bxx = -(double)28.28*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
+		double byy = -(double)28.28*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
+
+		lineTo2.setX(bxx);
+		lineTo2.setY(byy);
+		path.getElements().add(lineTo2);
+		
+		
+		double bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+		double byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+		
+		lineTo3.setX(bxx + bxxx);
+		lineTo3.setY(byy + byyy);
+		path.getElements().add(lineTo3);
+		
+
+		lineTo4.setX(bxx);
+		lineTo4.setY(byy);
+		path.getElements().add(lineTo4);
+
+		
+		bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+		byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+
+		lineTo5.setX(bxx + bxxx);
+		lineTo5.setY(byy + byyy);
+		path.getElements().add(lineTo5);
+		
+	}
 	
-	public void drag(double dragX, double dragY, String type) {
+	/*
+	 * 因为  圆的移动 进行移动
+	 */
+	public void circleDrag(double dragX, double dragY, String type) {
 		
 		if("start".equals(type)) {
 			moveTo.setX(moveTo.getX() + dragX);
@@ -177,6 +261,11 @@ public class NewPath {
 		
 		quadCurveTo.setControlX(x);
 		quadCurveTo.setControlY(y);
+		
+
+		// 中间字母的 移动
+		test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
+		
 		
 		path.getElements().remove(lineTo5);
 		path.getElements().remove(lineTo4);

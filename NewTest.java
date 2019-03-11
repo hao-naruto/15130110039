@@ -1,11 +1,15 @@
 package xidian.software.com.nfa;
 
-import javafx.scene.control.Label;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-
+import javafx.scene.text.Text;
+/*
+ * NFA 输入 字符
+ */
 public class NewTest {
 
-	private Label label;
+	private Text text;
 	private String trans;
 	
 	private NewPath path;
@@ -13,20 +17,53 @@ public class NewTest {
 	
 	public NewTest() {
 		// TODO Auto-generated constructor stub
-		label = new Label();
-		label.setFont(new Font("Arial", 20));
+		text = new Text();
+		text.setFont(new Font("Arial", 20));
+		
+		text.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				if(path.getPath().getStrokeWidth() == 5.0) {
+					path.getPath().setStrokeWidth(1.0);
+				}else {
+					path.getPath().setStrokeWidth(5.0);
+				}
+			}
+		});
+		
+		text.setOnMouseDragged(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				//  线 移动
+				path.drag(event.getSceneX(), event.getSceneY());
+			}
+		});
 	}
 
+	/*
+	 * 移动 文本
+	 */
+	public void move(double x, double y) {
+		
+		text.setLayoutX(x);
+		text.setLayoutY(y);
+		
+	}
+	
 
-	public Label getLabel() {
-		return label;
+
+
+	public Text getText() {
+		return text;
 	}
 
-
-	public void setLabel(Label label) {
-		this.label = label;
+	public void setText(Text text) {
+		this.text = text;
 	}
-
 
 	public String getTrans() {
 		return trans;
