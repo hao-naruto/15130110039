@@ -8,6 +8,7 @@ public class NFA {
 	
 	private ArrayList<NewPath> pathList;
 	
+	
 	public NFA() {
 		// TODO Auto-generated constructor stub
 		circleList = new ArrayList<NewCircle>();
