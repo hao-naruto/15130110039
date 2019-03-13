@@ -15,11 +15,17 @@ public class NewState {
 	private double OldX;
 	private double OldY;
 	
+	private double fontSize = 20.0;
+	private String fontType = "Arial";
 	
-	public NewState() {
+	
+	public NewState(String state) {
 		// TODO Auto-generated constructor stub
 		text = new Text();
-		text.setFont(new Font("Arial", 20));
+		text.setFont(new Font(fontType, fontSize));
+		
+		this.state = state;
+		text.setText(state);
 		
 		text.setOnMousePressed(new EventHandler<MouseEvent>() {
 
@@ -63,8 +69,19 @@ public class NewState {
 		});
 		
 	}
-
+	/*
+	 * 设置 坐标
+	 */
+	public void setXY(double x, double y) {
+		
+		text.setLayoutX(x - fontSize/4);
+		text.setLayoutY(y + fontSize/4);
+		
+	}
 	
+	/*
+	 * 拖拽
+	 */
 	public void drag(double dragX, double dragY) {
 		text.setLayoutX(dragX + text.getLayoutX());
 		text.setLayoutY(dragY + text.getLayoutY());
@@ -120,6 +137,18 @@ public class NewState {
 
 	public void setOldY(double oldY) {
 		OldY = oldY;
+	}
+	public double getFontSize() {
+		return fontSize;
+	}
+	public void setFontSize(double fontSize) {
+		this.fontSize = fontSize;
+	}
+	public String getFontType() {
+		return fontType;
+	}
+	public void setFontType(String fontType) {
+		this.fontType = fontType;
 	}
 
 	

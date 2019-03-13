@@ -9,6 +9,9 @@ import javafx.scene.shape.QuadCurveTo;
 
 public class NewPath {
 	
+	//  线的类型  是否 指向 自身
+	private String TYPE = "TO_OTHER";
+	
 	private Path path;
 	//线
 	private MoveTo moveTo;
@@ -24,9 +27,17 @@ public class NewPath {
 	// control  坐标
 	private double length;
 	
-	private NewTest test;
+	//线的粗细
+	private double strokeWidth = 5.0;
 	
-	public NewPath() {
+	// 箭头的 长度  与 角度
+	private double len = 10;
+	private double angle = 15.0;
+	
+	
+	private NewText text;
+	
+	public NewPath(String tran) {
 		// TODO Auto-generated constructor stub
 		path = new Path();
 		moveTo = new MoveTo();
@@ -37,6 +48,17 @@ public class NewPath {
 		
 		quadCurveTo = new QuadCurveTo();
 		
+		path.getElements().add(moveTo);
+		path.getElements().add(quadCurveTo);
+		path.getElements().add(lineTo2);
+		path.getElements().add(lineTo3);
+		path.getElements().add(lineTo4);
+		path.getElements().add(lineTo5);
+		
+		text = new NewText();
+		text.setTrans(tran);
+		text.getText().setText(tran);
+		text.setPath(this);
 		
 		path.setOnMousePressed(new EventHandler<MouseEvent>() {
 
@@ -52,10 +74,10 @@ public class NewPath {
 			@Override
 			public void handle(MouseEvent event) {
 				// TODO Auto-generated method stub
-				if(path.getStrokeWidth() == 5.0) {
+				if(path.getStrokeWidth() == strokeWidth) {
 					path.setStrokeWidth(1.0);
 				}else {
-					path.setStrokeWidth(5.0);
+					path.setStrokeWidth(strokeWidth);
 				}
 				
 			}
@@ -69,81 +91,6 @@ public class NewPath {
 				
 				NewPath.this.drag(event.getSceneX(), event.getSceneY());
 				
-//				double sX = moveTo.getX();
-//				double sY = moveTo.getY();
-//				double eX = quadCurveTo.getX();
-//				double eY = quadCurveTo.getY();
-//				
-//				double midX = (eX+sX)/2;
-//				double midY = (eY+sY)/2;
-//				
-//				double mouseX = event.getSceneX();
-//				double mouseY = event.getSceneY();
-//				
-//				
-//				// 这 算的 也太 麻烦了 吧  计算的是 鼠标距离 线 高度的 2 倍
-//				length = 2*Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))*
-//						((eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseX-midX)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))
-//						- (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseY-midY)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY)));
-//				
-//				double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
-//				double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
-//				
-//				//设置 控制点
-//				quadCurveTo.setControlX(x);
-//				quadCurveTo.setControlY(y);
-//				
-//				// 中间字母的 移动
-//				test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
-//				
-//				
-//				path.getElements().remove(lineTo5);
-//				path.getElements().remove(lineTo4);
-//				path.getElements().remove(lineTo3);
-//				path.getElements().remove(lineTo2);
-//				path.getElements().remove(quadCurveTo);
-//				path.getElements().remove(moveTo);
-//				
-//				path.getElements().add(moveTo);
-//				path.getElements().add(quadCurveTo);
-//				
-////				double ax = moveTo.getX();
-////				double ay = moveTo.getY();
-//				double bx = quadCurveTo.getX();
-//				double by = quadCurveTo.getY();
-//				
-////				double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
-////				double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
-//				double bxx = -(double)28.28*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
-//				double byy = -(double)28.28*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
-//
-//				lineTo2.setX(bxx);
-//				lineTo2.setY(byy);
-//				path.getElements().add(lineTo2);
-//				
-//				
-//				double bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-//				double byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-//				
-//				lineTo3.setX(bxx + bxxx);
-//				lineTo3.setY(byy + byyy);
-//				path.getElements().add(lineTo3);
-//				
-//
-//				lineTo4.setX(bxx);
-//				lineTo4.setY(byy);
-//				path.getElements().add(lineTo4);
-//
-//				
-//				bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-//				byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-//
-//				lineTo5.setX(bxx + bxxx);
-//				lineTo5.setY(byy + byyy);
-//				path.getElements().add(lineTo5);
-//				
-//				System.out.println(x + "   " + y);
-				
 				//  判断在 直线的  哪一侧
 //				System.out.println((ey-sy)*(event.getX()-OldX) + (sx-ex)*(event.getY()-OldY) + (ex*sy-sx*ey));
 
@@ -155,6 +102,88 @@ public class NewPath {
 		
 	}
 
+	/*
+	 *  首尾 坐标时  重画 path
+	 */
+	public NewPath resetPathByXY(double sX, double sY, double eX, double eY, double length) {
+		
+		
+		path.getElements().remove(lineTo5);
+		path.getElements().remove(lineTo4);
+		path.getElements().remove(lineTo3);
+		path.getElements().remove(lineTo2);
+		path.getElements().remove(quadCurveTo);
+		path.getElements().remove(moveTo);
+		
+		moveTo.setX(sX);
+		moveTo.setY(sY);
+		quadCurveTo.setX(eX);
+		quadCurveTo.setY(eY);
+		this.length = length;
+
+		double midX = (eX+sX)/2;
+		double midY = (eY+sY)/2;
+		
+		double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
+		double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
+		
+		//设置 控制点
+		quadCurveTo.setControlX(x);
+		quadCurveTo.setControlY(y);
+		
+		// 中间字母的 移动
+		text.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
+		
+		
+		path.getElements().add(moveTo);
+		path.getElements().add(quadCurveTo);
+		
+//		double ax = moveTo.getX();
+//		double ay = moveTo.getY();
+		double bx = quadCurveTo.getX();
+		double by = quadCurveTo.getY();
+		
+//		double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
+//		double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
+		double bxx = -(double)toCircle.getCircle().getRadius()*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
+		double byy = -(double)toCircle.getCircle().getRadius()*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
+
+		// 判断  线的类型  指向  自身 还是 指向 other
+		if(!"TO_OTHER".equals(TYPE)) {
+			bxx = bx;
+			byy = by;
+
+		}
+		
+		lineTo2.setX(bxx);
+		lineTo2.setY(byy);
+		path.getElements().add(lineTo2);
+		
+		
+		double bxxx = len*(Math.cos(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+		double byyy = len*(Math.cos(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+		
+		lineTo3.setX(bxx + bxxx);
+		lineTo3.setY(byy + byyy);
+		path.getElements().add(lineTo3);
+		
+
+		lineTo4.setX(bxx);
+		lineTo4.setY(byy);
+		path.getElements().add(lineTo4);
+
+		
+		bxxx = len*(Math.cos(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+		byyy = len*(Math.cos(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+
+		lineTo5.setX(bxx + bxxx);
+		lineTo5.setY(byy + byyy);
+		path.getElements().add(lineTo5);
+		
+		return this;
+		
+	}
+	
 	/*
 	 * 两个端点坐标不变   曲线的弧度变化
 	 */
@@ -173,61 +202,70 @@ public class NewPath {
 				((eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseX-midX)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY))
 				- (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) * (mouseY-midY)/Math.sqrt((mouseX-midX)*(mouseX-midX) + (mouseY-midY)*(mouseY-midY)));
 		
-		double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
-		double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
+		this.resetPathByXY(sX, sY, eX, eY, length);
 		
-		//设置 控制点
-		quadCurveTo.setControlX(x);
-		quadCurveTo.setControlY(y);
-		
-		// 中间字母的 移动
-		test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
-		
-		
-		path.getElements().remove(lineTo5);
-		path.getElements().remove(lineTo4);
-		path.getElements().remove(lineTo3);
-		path.getElements().remove(lineTo2);
-		path.getElements().remove(quadCurveTo);
-		path.getElements().remove(moveTo);
-		
-		path.getElements().add(moveTo);
-		path.getElements().add(quadCurveTo);
-		
-//		double ax = moveTo.getX();
-//		double ay = moveTo.getY();
-		double bx = quadCurveTo.getX();
-		double by = quadCurveTo.getY();
-		
-//		double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
-//		double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
-		double bxx = -(double)28.28*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
-		double byy = -(double)28.28*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
-
-		lineTo2.setX(bxx);
-		lineTo2.setY(byy);
-		path.getElements().add(lineTo2);
-		
-		
-		double bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-		double byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-		
-		lineTo3.setX(bxx + bxxx);
-		lineTo3.setY(byy + byyy);
-		path.getElements().add(lineTo3);
-		
-
-		lineTo4.setX(bxx);
-		lineTo4.setY(byy);
-		path.getElements().add(lineTo4);
-
-		
-		bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-		byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-
-		lineTo5.setX(bxx + bxxx);
-		lineTo5.setY(byy + byyy);
-		path.getElements().add(lineTo5);
+//		double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
+//		double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
+//		
+//		//设置 控制点
+//		quadCurveTo.setControlX(x);
+//		quadCurveTo.setControlY(y);
+//		
+//		// 中间字母的 移动
+//		test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
+//		
+//		
+//		path.getElements().remove(lineTo5);
+//		path.getElements().remove(lineTo4);
+//		path.getElements().remove(lineTo3);
+//		path.getElements().remove(lineTo2);
+//		path.getElements().remove(quadCurveTo);
+//		path.getElements().remove(moveTo);
+//		
+//		path.getElements().add(moveTo);
+//		path.getElements().add(quadCurveTo);
+//		
+////		double ax = moveTo.getX();
+////		double ay = moveTo.getY();
+//		double bx = quadCurveTo.getX();
+//		double by = quadCurveTo.getY();
+//		
+////		double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
+////		double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
+//		double bxx = -(double)fromCircle.getCircle().getRadius()*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
+//		double byy = -(double)fromCircle.getCircle().getRadius()*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
+//
+//		// 判断  线的类型  指向  自身 还是 指向 other
+//		if(!"TO_OTHER".equals(TYPE)) {
+//			bxx = bx;
+//			byy = by;
+//
+//		}
+//		
+//		lineTo2.setX(bxx);
+//		lineTo2.setY(byy);
+//		path.getElements().add(lineTo2);
+//		
+//		
+//		double bxxx = len*(Math.cos(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//		double byyy = len*(Math.cos(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//		
+//		lineTo3.setX(bxx + bxxx);
+//		lineTo3.setY(byy + byyy);
+//		path.getElements().add(lineTo3);
+//		
+//
+//		lineTo4.setX(bxx);
+//		lineTo4.setY(byy);
+//		path.getElements().add(lineTo4);
+//
+//		
+//		bxxx = len*(Math.cos(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//		byyy = len*(Math.cos(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//
+//		lineTo5.setX(bxx + bxxx);
+//		lineTo5.setY(byy + byyy);
+//		path.getElements().add(lineTo5);
 		
 	}
 	
@@ -237,82 +275,100 @@ public class NewPath {
 	public void circleDrag(double dragX, double dragY, String type) {
 		
 		if("start".equals(type)) {
-			moveTo.setX(moveTo.getX() + dragX);
-			moveTo.setY(moveTo.getY() + dragY);
+			
+			this.resetPathByXY(moveTo.getX() + dragX, moveTo.getY() + dragY,
+					quadCurveTo.getX(), quadCurveTo.getY(), length);
+//			
+//			moveTo.setX(moveTo.getX() + dragX);
+//			moveTo.setY(moveTo.getY() + dragY);
 			
 			
 			
 		}else if("end".equals(type)) {
-			quadCurveTo.setX(quadCurveTo.getX() + dragX);
-			quadCurveTo.setY(quadCurveTo.getY() + dragY);
+			
+			this.resetPathByXY(moveTo.getX(), moveTo.getY(),
+					quadCurveTo.getX() + dragX, quadCurveTo.getY() + dragY, length);
+//			
+//			quadCurveTo.setX(quadCurveTo.getX() + dragX);
+//			quadCurveTo.setY(quadCurveTo.getY() + dragY);
 	
 		}
 		
-		double sX = moveTo.getX();
-		double sY = moveTo.getY();
-		double eX = quadCurveTo.getX();
-		double eY = quadCurveTo.getY();
-		
-		double midX = (eX+sX)/2;
-		double midY = (eY+sY)/2;
-		
-		double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
-		double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
-		
-		quadCurveTo.setControlX(x);
-		quadCurveTo.setControlY(y);
-		
-
-		// 中间字母的 移动
-		test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
 		
 		
-		path.getElements().remove(lineTo5);
-		path.getElements().remove(lineTo4);
-		path.getElements().remove(lineTo3);
-		path.getElements().remove(lineTo2);
-		path.getElements().remove(quadCurveTo);
-		path.getElements().remove(moveTo);
-		
-		path.getElements().add(moveTo);
-		path.getElements().add(quadCurveTo);
-		
-//		double ax = moveTo.getX();
-//		double ay = moveTo.getY();
-		double bx = quadCurveTo.getX();
-		double by = quadCurveTo.getY();
-		
-//		double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
-//		double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
-		double bxx = -(double)28.28*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
-		double byy = -(double)28.28*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
-
-		lineTo2.setX(bxx);
-		lineTo2.setY(byy);
-		path.getElements().add(lineTo2);
-		
-		
-		double bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-		double byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-		
-		lineTo3.setX(bxx + bxxx);
-		lineTo3.setY(byy + byyy);
-		path.getElements().add(lineTo3);
-		
-
-		lineTo4.setX(bxx);
-		lineTo4.setY(byy);
-		path.getElements().add(lineTo4);
-
-		
-		bxxx = 10*(Math.cos(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-		byyy = 10*(Math.cos(15.0)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(15.0)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
-
-		lineTo5.setX(bxx + bxxx);
-		lineTo5.setY(byy + byyy);
-		path.getElements().add(lineTo5);
-		
-		
+//		double sX = moveTo.getX();
+//		double sY = moveTo.getY();
+//		double eX = quadCurveTo.getX();
+//		double eY = quadCurveTo.getY();
+//		
+//		double midX = (eX+sX)/2;
+//		double midY = (eY+sY)/2;
+//		
+//		double x = length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midX;
+//		double y = -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY)) + midY;
+//		
+//		quadCurveTo.setControlX(x);
+//		quadCurveTo.setControlY(y);
+//		
+//
+//		// 中间字母的 移动
+//		test.move(length * (eY-sY)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midX, -length * (eX-sX)/Math.sqrt((eX-sX)*(eX-sX) + (eY-sY)*(eY-sY))/2 + midY);
+//		
+//		
+//		path.getElements().remove(lineTo5);
+//		path.getElements().remove(lineTo4);
+//		path.getElements().remove(lineTo3);
+//		path.getElements().remove(lineTo2);
+//		path.getElements().remove(quadCurveTo);
+//		path.getElements().remove(moveTo);
+//		
+//		path.getElements().add(moveTo);
+//		path.getElements().add(quadCurveTo);
+//		
+////		double ax = moveTo.getX();
+////		double ay = moveTo.getY();
+//		double bx = quadCurveTo.getX();
+//		double by = quadCurveTo.getY();
+//		
+////		double axx = (double)28.28*(bx-ax)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ax;
+////		double ayy = (double)28.28*(by-ay)/Math.sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)) +ay;
+//		double bxx = -(double)fromCircle.getRadius()*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +bx;
+//		double byy = -(double)fromCircle.getRadius()*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) +by;
+//
+//		// 判断  线的类型  指向  自身 还是 指向 other
+//		if(!"TO_OTHER".equals(TYPE)) {
+//			bxx = bx;
+//			byy = by;
+//
+//		}
+//		
+//		
+//		lineTo2.setX(bxx);
+//		lineTo2.setY(byy);
+//		path.getElements().add(lineTo2);
+//		
+//		
+//		double bxxx = len*(Math.cos(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//		double byyy = len*(Math.cos(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//		
+//		lineTo3.setX(bxx + bxxx);
+//		lineTo3.setY(byy + byyy);
+//		path.getElements().add(lineTo3);
+//		
+//
+//		lineTo4.setX(bxx);
+//		lineTo4.setY(byy);
+//		path.getElements().add(lineTo4);
+//
+//		
+//		bxxx = len*(Math.cos(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) + Math.sin(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//		byyy = len*(Math.cos(angle)*(by-y)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)) - Math.sin(angle)*(bx-x)/Math.sqrt((bx-x)*(bx-x) + (by-y)*(by-y)));
+//
+//		lineTo5.setX(bxx + bxxx);
+//		lineTo5.setY(byy + byyy);
+//		path.getElements().add(lineTo5);
+//		
+//		
 	}
 	
 	
@@ -423,14 +479,46 @@ public class NewPath {
 		this.length = length;
 	}
 
+	
 
-	public NewTest getTest() {
-		return test;
+	public NewText getText() {
+		return text;
 	}
 
+	public void setText(NewText text) {
+		this.text = text;
+	}
 
-	public void setTest(NewTest test) {
-		this.test = test;
+	public double getStrokeWidth() {
+		return strokeWidth;
+	}
+
+	public void setStrokeWidth(double strokeWidth) {
+		this.strokeWidth = strokeWidth;
+	}
+
+	public double getLen() {
+		return len;
+	}
+
+	public void setLen(double len) {
+		this.len = len;
+	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
+	}
+
+	public String getTYPE() {
+		return TYPE;
+	}
+
+	public void setTYPE(String tYPE) {
+		TYPE = tYPE;
 	}
 	
 	
